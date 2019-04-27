@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classes from './App.css';
-import Person from './Person/Person';
+import Person from '../components/Persons/Person/Person';
+import ErrorBoundary from '../ErrorBoundary/ErrorBoundary'
 
 class App extends Component {
     state = {
@@ -47,34 +48,27 @@ class App extends Component {
     }
 
     render() {
-        const style = {
-            backgroundColor: 'green',
-            color: "white",
-            fint: 'inherit',
-            border: '1px solid blue',
-            padding: '8px',
-            cursor: 'pointer'
-        };
 
         let persons = null;
+        let btnClass = "";
 
         if (this.state.showPersons) {
             persons = (
                 <div>
                     {this.state.persons.map((person, index) => {
                         return (
-                            <Person  
+                            <ErrorBoundary key={person.id}>
+                                <Person  
                                 click={() => this.deletePesonHandler(index)}
                                 name={person.name} 
-                                age={person.age}
-                                key={person.id} 
+                                age={person.age} 
                                 changed={(event) => this.nameChangedHandler(event, person.id)} />
+                            </ErrorBoundary>    
                         )       
                     })}
                 </div> 
             );
-
-            style.backgroundColor = "red";
+            btnClass = classes.Red;
         }
 
         let assignedClasses = [];
@@ -86,15 +80,15 @@ class App extends Component {
         }
 
         return (
-                <div className={classes.App}>
-                    <h1>Hi, I'm a React APp</h1>
-                    <p className={assignedClasses.join(" ")}>This is really working</p>
-                    <button 
-                        style={style}
-                        onClick={this.togglePersonsHandler}>Toogle Persons
-                    </button>
-                    {persons}
-                </div>
+            <div className={classes.App}>
+                <h1>Hi, I'm a React APp</h1>
+                <p className={assignedClasses.join(" ")}>This is really working</p>
+                <button
+                    className={btnClass}
+                    onClick={this.togglePersonsHandler}>Toogle Persons
+                </button>
+                {persons}
+            </div>
         );
     }   
 }
